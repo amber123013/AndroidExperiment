@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AndroidExperiment</string>
+    <string name="dial">拨号</string>
+    <string name="msg">短信</string>
+    <string name="calculator">计算器</string>
+    <string name="setting">设置</string>
+</resources>
