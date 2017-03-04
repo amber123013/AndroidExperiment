@@ -17,8 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import java.util.List;
 
 import static android.R.attr.targetSdkVersion;
 
@@ -46,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 dial.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Uri uri = Uri.parse("tel:" + "1875980871");
+                        String callPhoneNumber = ((EditText)findViewById(R.id.call_phone_number)).getText().toString();
+                        Uri uri = Uri.parse("tel:" + callPhoneNumber);
                         Intent intent = new Intent(Intent.ACTION_CALL, uri);
                         //Toast.makeText(MainActivity.this,"请启用允许拨打电话权限",Toast.LENGTH_SHORT).show();
                         //ContextCompat.checkSelfPermission() 用于检查权限
@@ -74,20 +78,61 @@ public class MainActivity extends AppCompatActivity {
                                 showDialogTipUserGoToAppSettting();
                                 break;
                         }
-//                        if (PackageManager.PERMISSION_GRANTED != pri) {
-//                            //权限可用启动 使用intent拨打电话
-//
-//
-//                        } else {
-//                            //ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 321);
-//                            // Toast.makeText(MainActivity.this, "请启用允许拨打电话权限", Toast.LENGTH_SHORT).show();
-//
-//
-//
-//                        }
+                    }
+                });
+            }
+        });
+        //主页面短信按钮
+        Button button_msg = (Button) findViewById(R.id.button_msg);
+        button_msg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
+                //清除FrameLayout中的视图
+                frameLayout.removeAllViews();
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                //flate 出内容视图 并添加到FramLayout中
+                inflater.inflate(R.layout.msg_layout, frameLayout);
+
+
+                Button msg = (Button) findViewById(R.id.msg);
+                msg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //获得号码
+                        String phoneNumber = ((EditText)findViewById(R.id.msg_phone_number)).getText().toString();
+
+                        EditText msg = (EditText)findViewById(R.id.msg_phone_content);
+                        //获得短信内容
+                        String phoneContent = msg.getText().toString();
+                        //获取短信管理器
+                        android.telephony.SmsManager smsManager = android.telephony.SmsManager.getDefault();
+                        //拆分短信内容
+                        List<String> msgContents = smsManager.divideMessage(phoneContent);
+                        for(String text: msgContents) {
+                            smsManager.sendTextMessage(phoneNumber,null,text,null,null);
+                        }
+                        Toast.makeText(MainActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
+                        //清空短信框
+                        msg.setText("");
 
                     }
                 });
+            }
+        });
+        //计算按钮
+        Button button_calc = (Button) findViewById(R.id.button_calc);
+        button_calc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
+                //清除FrameLayout中的视图
+                frameLayout.removeAllViews();
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                //flate 出内容视图 并添加到FramLayout中
+                inflater.inflate(R.layout.calc_layout, frameLayout);
+
+
             }
         });
     }
