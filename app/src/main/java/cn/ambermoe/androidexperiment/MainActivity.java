@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -148,6 +149,42 @@ public class MainActivity extends AppCompatActivity {
                 etInput = (EditText)findViewById(R.id.et_input);
                 etInput.setText("");
 
+            }
+        });
+        //个人中心
+        Button button_personal_center = (Button) findViewById(R.id.button_personal_center);
+        button_personal_center.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lb_title.setText("个人中心");
+                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
+                frameLayout.removeAllViews();
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                inflater.inflate(R.layout.personalcenter_layout,frameLayout);
+                //登录按钮
+                ImageButton buttonLogin = (ImageButton) findViewById(R.id.button_login);
+                buttonLogin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lb_title.setText("登录");
+                        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
+                        frameLayout.removeAllViews();
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        inflater.inflate(R.layout.login_layout,frameLayout);
+                    }
+                });
+                //注册按钮
+                ImageButton buttonRegister = (ImageButton) findViewById(R.id.button_register);
+                buttonRegister.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lb_title.setText("注册");
+                        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
+                        frameLayout.removeAllViews();
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        inflater.inflate(R.layout.register_layout,frameLayout);
+                    }
+                });
             }
         });
     }

@@ -55,13 +55,13 @@
             android:textSize="18sp"
             android:gravity="center"/>
         <Button
-            android:id="@+id/button_setting"
+            android:id="@+id/button_personal_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/bg_color"
             android:textSize="18sp"
-            android:text="@string/setting"
+            android:text="@string/personalCenter"
             android:gravity="center"/>
     </LinearLayout>
     <FrameLayout

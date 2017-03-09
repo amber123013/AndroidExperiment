@@ -4,4 +4,5 @@
     <string name="msg">短信</string>
     <string name="calculator">计算器</string>
     <string name="setting">设置</string>
+    <string name="personalCenter">个人中心</string>
 </resources>
