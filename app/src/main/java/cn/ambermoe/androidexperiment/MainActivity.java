@@ -14,12 +14,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -183,10 +190,88 @@ public class MainActivity extends AppCompatActivity {
                         frameLayout.removeAllViews();
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         inflater.inflate(R.layout.register_layout,frameLayout);
+                        //获取学历按钮
+                        Button buttonEducation = (Button) findViewById(R.id.getEducation);
+                        buttonEducation.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MainActivity.this,eduActivity.class);
+                                //request
+                                startActivityForResult(intent,1);
+                            }
+                        });
+                        //性别
+                        RadioGroup sexGroup = (RadioGroup) findViewById(R.id.sex_group);
+                        sexGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                RadioButton rbSex = (RadioButton) findViewById(checkedId);
+                                String strSex = rbSex.getText().toString();
+                                Log.v("MainActivity-sex",strSex);
+                                Toast.makeText(MainActivity.this,strSex,Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //爱好
+                        CheckBox cbSwim = (CheckBox) findViewById(R.id.cb_swim);
+                        cbSwim.setOnCheckedChangeListener(new CheckBoxListenner());
+                        CheckBox cbDance = (CheckBox) findViewById(R.id.cb_dance);
+                        cbDance.setOnCheckedChangeListener(new CheckBoxListenner());
+                        CheckBox cbSing = (CheckBox) findViewById(R.id.cb_sing);
+                        cbSing.setOnCheckedChangeListener(new CheckBoxListenner());
+                        //专业选择
+                        Spinner spMajor = (Spinner) findViewById(R.id.sp_major);
+                        spMajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                TextView textMajor = (TextView) view;
+                                String strMajor = textMajor.getText().toString();
+                                Log.v("MainActivity",strMajor);
+                                Toast.makeText(MainActivity.this,strMajor,Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
                     }
                 });
             }
         });
+    }
+    private class CheckBoxListenner implements android.widget.CompoundButton.OnCheckedChangeListener{
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            switch (buttonView.getId()){
+                case R.id.cb_swim:
+                    if (isChecked) {
+                        Log.v("MainActivity", buttonView.getText().toString());
+                        Toast.makeText(MainActivity.this, buttonView.getText().toString(), Toast.LENGTH_LONG).show();
+                    }
+                        break;
+                case R.id.cb_dance:
+                    if(isChecked) {
+                        Log.v("MainActivity", buttonView.getText().toString());
+                        Toast.makeText(MainActivity.this, buttonView.getText().toString(), Toast.LENGTH_LONG).show();
+                    }
+                        break;
+                case R.id.cb_sing:
+                    if(isChecked) {
+                        Log.v("MainActivity", buttonView.getText().toString());
+                        Toast.makeText(MainActivity.this, buttonView.getText().toString(), Toast.LENGTH_LONG).show();
+                    }
+                        break;
+            }
+        }
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==1 && resultCode == 1){
+            String edu = data.getStringExtra("edu");
+            ((EditText)findViewById(R.id.eduEditText)).setText(edu);
+        }
     }
 
     /**

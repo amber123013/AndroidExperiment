@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="major">
+        <item>网络工程</item>
+        <item>计算机科学与技术</item>
+        <item>物联网</item>
+        <item>软件工程</item>
+    </array>
+    <array name="edu">
+        <item>大学本科</item>
+        <item>专科</item>
+        <item>高中</item>
+        <item>初中</item>
+    </array>
+</resources>
