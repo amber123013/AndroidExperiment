@@ -140,22 +140,13 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-        //计算按钮
-        Button button_calc = (Button) findViewById(R.id.button_calc);
-        button_calc.setOnClickListener(new View.OnClickListener() {
+        //联系人按钮
+        Button button_contact = (Button) findViewById(R.id.button_contact);
+        button_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lb_title.setText("计算器");
-                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
-                //清除FrameLayout中的视图
-                frameLayout.removeAllViews();
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                //flate 出内容视图 并添加到FramLayout中
-                inflater.inflate(R.layout.calc_layout, frameLayout);
-                //计算结果框
-                etInput = (EditText)findViewById(R.id.et_input);
-                etInput.setText("");
-
+            Intent intent = new Intent(MainActivity.this,ContactActivity.class);
+            startActivity(intent);
             }
         });
         //个人中心
@@ -302,67 +293,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).setCancelable(false).show();
     }
-    //计算器功能实现
-    public void setEtInputValue(View v) {
-        Button clickedButton = (Button)v;
-        char btValue = ((Button) v).getText().toString().trim().charAt(0);
-        //计算框中的值
-        String tempValue = etInput.getText().toString();
-        //框中的最后一个字符
-        char lastWord = ' ';
-        if(!"".equals(tempValue))
-            lastWord = tempValue.charAt(tempValue.length() - 1);
-        switch (btValue) {
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '0':
-                etInput.setText(etInput.getText().toString() + btValue);
-                break;
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-                //运算符之前不能是运算符和空字符
-                if(lastWord != '+' && lastWord !='-' && lastWord !='*' && lastWord != '/' && tempValue != "") {
-                    etInput.setText(etInput.getText().toString() + btValue);
-                } else {
-                    Toast.makeText(MainActivity.this,"请正确输入计算式",Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case '=':
-                //=号之前不能是运算符
-                if(lastWord !='+' && lastWord !='-' && lastWord !='*' && lastWord != '/') {
-                    etInput.setText(Expression.toValue(Expression.toPostfix(etInput.getText().toString())) + "");
-                } else{
-                    Toast.makeText(MainActivity.this,"你确定输入完全了吗？",Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case '.':
-                //小数点前不能是空 运算符 和它自身
-                if(!"".equals(tempValue) && (lastWord != '+' && lastWord !='-' && lastWord !='*' && lastWord != '/' && lastWord !='.'))
-                    etInput.setText(etInput.getText().toString() + btValue);
-                else
-                    Toast.makeText(MainActivity.this,"是不是哪里输错了呢？",Toast.LENGTH_SHORT).show();
-                break;
-            case 'C':
-                etInput.setText("");
-                break;
-            case '←':
-                //删除最后一个字符，如果删除之后最后为 ‘.’ 则删除它
-                tempValue = etInput.getText().toString();
-                etInput.setText(tempValue.substring(0,tempValue.length() -1));
-                tempValue = etInput.getText().toString();
-                if(!"".equals(tempValue) && tempValue.charAt(tempValue.length() -1) == '.')
-                    etInput.setText(tempValue.substring(0,tempValue.length() -1));
-                break;
-        }
-    }
+
 
 }

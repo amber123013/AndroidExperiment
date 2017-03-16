@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".eduActivity"></activity>
+        <activity android:name=".eduActivity" />
+        <activity android:name=".ContactActivity"
+            android:label="联系人"></activity>
     </application>
 
 </manifest>
