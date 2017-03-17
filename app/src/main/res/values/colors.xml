@@ -6,11 +6,11 @@
     <color name="bg_color">#ccc</color>
 
     <!--姓名姓氏的颜色-->
-    <color name="surname1">#4A7BA7</color>
+    <color name="surname1">#0307f9</color>
     <color name="surname2">#6ae26e</color>
-    <color name="surname3">#e9dd36</color>
-    <color name="surname4">#d1c636d1</color>
-    <color name="surname5">#75a7235e</color>
+    <color name="surname3">#ffee00</color>
+    <color name="surname4">#d1f9010e</color>
+    <color name="surname5">#75fc00a8</color>
     <!--姓名颜色-->
     <color name="textColorName">#2B3D4D</color>
     <!--个人信息颜色-->

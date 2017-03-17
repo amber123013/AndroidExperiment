@@ -105,14 +105,7 @@ public class MainActivity extends AppCompatActivity {
         button_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lb_title.setText("短信");
-                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
-                //清除FrameLayout中的视图
-                frameLayout.removeAllViews();
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                //flate 出内容视图 并添加到FramLayout中
-                inflater.inflate(R.layout.msg_layout, frameLayout);
-
+                checkoutMsg();
 
                 Button msg = (Button) findViewById(R.id.msg);
                 msg.setOnClickListener(new View.OnClickListener() {
@@ -140,13 +133,15 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
         //联系人按钮
         Button button_contact = (Button) findViewById(R.id.button_contact);
         button_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this,ContactActivity.class);
-            startActivity(intent);
+                //请求码2
+                startActivityForResult(intent,2);
             }
         });
         //个人中心
@@ -230,6 +225,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * 切换到短信页面
+     */
+    private void checkoutMsg() {
+        lb_title.setText("短信");
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content);
+        //清除FrameLayout中的视图
+        frameLayout.removeAllViews();
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //flate 出内容视图 并添加到FramLayout中
+        inflater.inflate(R.layout.msg_layout, frameLayout);
+    }
     private class CheckBoxListenner implements android.widget.CompoundButton.OnCheckedChangeListener{
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -262,6 +270,14 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode ==1 && resultCode == 1){
             String edu = data.getStringExtra("edu");
             ((EditText)findViewById(R.id.eduEditText)).setText(edu);
+        }
+        //ContactActivity的返回
+        if(requestCode == 2 && resultCode == 2) {
+            //切换到短信页面
+            checkoutMsg();
+            //获取电话号码，并放入电话号码框
+            String phoneNumber = data.getStringExtra("phoneNumber");
+            ((EditText)findViewById(R.id.msg_phone_number)).setText(phoneNumber);
         }
     }
 
