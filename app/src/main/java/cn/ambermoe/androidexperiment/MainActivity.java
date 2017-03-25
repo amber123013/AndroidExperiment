@@ -2,6 +2,7 @@ package cn.ambermoe.androidexperiment;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,16 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etInput;
 
     TextView lb_title;
+    boolean[] flags=new boolean[]{false,false,false};//初始复选情况
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,6 +187,30 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         //性别
+                        TextView radioText = (TextView) findViewById(R.id.radio_text);
+                        radioText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setTitle("性别");
+                                final String[] items = new String[]{"男","女"};
+                                builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                       switch (which) {
+                                           case 0:
+                                               ((RadioButton)findViewById(R.id.sex_man)).setChecked(true);
+                                               break;
+                                           case 1:
+                                               ((RadioButton)findViewById(R.id.sex_woman)).setChecked(true);
+                                               break;
+                                       }
+                                        dialog.dismiss();
+                                    }
+                                });
+                                builder.create().show();
+                            }
+                        });
                         RadioGroup sexGroup = (RadioGroup) findViewById(R.id.sex_group);
                         sexGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                             @Override
@@ -198,27 +222,87 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         //爱好
-                        CheckBox cbSwim = (CheckBox) findViewById(R.id.cb_swim);
-                        cbSwim.setOnCheckedChangeListener(new CheckBoxListenner());
-                        CheckBox cbDance = (CheckBox) findViewById(R.id.cb_dance);
-                        cbDance.setOnCheckedChangeListener(new CheckBoxListenner());
-                        CheckBox cbSing = (CheckBox) findViewById(R.id.cb_sing);
-                        cbSing.setOnCheckedChangeListener(new CheckBoxListenner());
+                        TextView checkBoxText = (TextView)findViewById(R.id.checkbox_text);
+
+                        checkBoxText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+
+                                //设置对话框的标题
+                                builder.setTitle("复选框对话框");
+                                final String[] items = new String[]{"游泳","舞蹈","唱歌"};
+                                builder.setMultiChoiceItems(items, flags, new DialogInterface.OnMultiChoiceClickListener(){
+                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                        flags[which]=isChecked;
+                                    }
+                                });
+                                //添加一个确定按钮
+                                builder.setPositiveButton(" 确 定 ", new DialogInterface.OnClickListener(){
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //设置主界面选中
+                                        if(flags[0])
+                                                ((CheckBox) findViewById(R.id.cb_swim)).setChecked(true);
+                                        else
+                                            ((CheckBox) findViewById(R.id.cb_swim)).setChecked(false);
+                                        if(flags[1])
+                                            ((CheckBox) findViewById(R.id.cb_dance)).setChecked(true);
+                                        else
+                                            ((CheckBox) findViewById(R.id.cb_dance)).setChecked(false);
+                                        if(flags[2])
+                                            ((CheckBox) findViewById(R.id.cb_sing)).setChecked(true);
+                                        else
+                                            ((CheckBox) findViewById(R.id.cb_sing)).setChecked(false);
+                                    }
+                                });
+                                //创建一个复选框对话
+                                builder.create().show();
+                            }
+                        });
+
                         //专业选择
-                        Spinner spMajor = (Spinner) findViewById(R.id.sp_major);
-                        spMajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        ExpandableListView listView = (ExpandableListView) findViewById(R.id.list);
+                        MyExpandableListAdapter adapter = new MyExpandableListAdapter(MainActivity.this,listView);
+                        listView.setAdapter(adapter);
+                        //免费注册按钮
+                        Button button = (Button) findViewById(R.id.register_button);
+                        button.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                TextView textMajor = (TextView) view;
-                                String strMajor = textMajor.getText().toString();
-                                Log.v("MainActivity",strMajor);
-                                Toast.makeText(MainActivity.this,strMajor,Toast.LENGTH_SHORT).show();
-                            }
+                            public void onClick(View v) {
+                                findViewById(R.id.register_content).setVisibility(View.GONE);
+                                View progress  = findViewById(R.id.progress_box);
+                                progress.setVisibility(View.VISIBLE);
+                                // 创建进度对话框
+                                final ProgressDialog pd = new ProgressDialog(MainActivity.this);
+                                pd.setMax(100);
+                                // 设置对话框的标题
+                                pd.setTitle("注册中");
+                                // 设置对话框 显示的内容
+                                pd.setMessage("注册完成百分比");
+                                // 设置对话框不能用“取消”按钮关闭
+                                pd.setCancelable(false);
+                                // 设置对话框的进度条风格
+                                pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                // 设置对话框的进度条是否显示进度(false是显示
+                                pd.setIndeterminate(false);
+                                pd.show();
+                                Thread thread = new Thread(){
+                                    int count=0;
+                                    public void run(){
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
+                                        while(count<100){
+                                            pd.setProgress(count++);
+                                            try {
+                                                sleep(20);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        pd.dismiss();
+                                    }
+                                };
+                                thread.start();
+                        }
                         });
                     }
                 });
@@ -238,32 +322,7 @@ public class MainActivity extends AppCompatActivity {
         //flate 出内容视图 并添加到FramLayout中
         inflater.inflate(R.layout.msg_layout, frameLayout);
     }
-    private class CheckBoxListenner implements android.widget.CompoundButton.OnCheckedChangeListener{
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            switch (buttonView.getId()){
-                case R.id.cb_swim:
-                    if (isChecked) {
-                        Log.v("MainActivity", buttonView.getText().toString());
-                        Toast.makeText(MainActivity.this, buttonView.getText().toString(), Toast.LENGTH_LONG).show();
-                    }
-                        break;
-                case R.id.cb_dance:
-                    if(isChecked) {
-                        Log.v("MainActivity", buttonView.getText().toString());
-                        Toast.makeText(MainActivity.this, buttonView.getText().toString(), Toast.LENGTH_LONG).show();
-                    }
-                        break;
-                case R.id.cb_sing:
-                    if(isChecked) {
-                        Log.v("MainActivity", buttonView.getText().toString());
-                        Toast.makeText(MainActivity.this, buttonView.getText().toString(), Toast.LENGTH_LONG).show();
-                    }
-                        break;
-            }
-        }
 
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
