@@ -1,6 +1,9 @@
 package cn.ambermoe.memo;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +28,14 @@ public class MemoFragment extends Fragment {
         TextView textView = (TextView) view.findViewById(R.id.edit);
         textView.setText(str);
 
+        //获取 SharedPreferences
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());;
+        //获取color size
+        String color = sharedPrefs.getString("fontcolor","#333");
+        String fontsize = sharedPrefs.getString("fontsize","16");
+        //设置color size
+        textView.setTextSize(Float.parseFloat(fontsize));
+        textView.setTextColor(Color.parseColor(color));
         return view;
     }
 }

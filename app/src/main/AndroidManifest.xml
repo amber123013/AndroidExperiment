@@ -21,18 +21,28 @@
             android:authorities="cn.ambermoe.memo"
             android:exported="false" />
 
-        <activity android:name=".EditorActivity"
-            android:theme="@style/EditorTheme"
-            android:label="添加">
-            <!--返回按钮-->
+        <activity
+            android:name=".EditorActivity"
+            android:label="添加"
+            android:theme="@style/EditorTheme">
+
+            <!-- 返回按钮 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".DetailPagerActivity"
-            android:theme="@style/EditorTheme"
-            android:label="查看">
-            <!--返回按钮-->
+        <activity
+            android:name=".DetailPagerActivity"
+            android:label="查看"
+            android:theme="@style/EditorTheme">
+
+            <!-- 返回按钮 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".SettingActivity">
+            <!-- 返回按钮 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

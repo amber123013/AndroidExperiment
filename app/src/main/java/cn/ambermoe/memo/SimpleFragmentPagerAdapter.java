@@ -3,7 +3,6 @@ package cn.ambermoe.memo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -22,13 +21,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public int count;
-    Fragment currentFragment;
 
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        currentFragment = (MemoFragment) object;
-        super.setPrimaryItem(container, position, object);
-    }
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;

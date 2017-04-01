@@ -1,7 +1,10 @@
 package cn.ambermoe.memo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +25,10 @@ import cn.ambermoe.memo.data.MemoContract.MemoEntry;
  */
 public class MemoCursorAdapter extends CursorAdapter{
 
+    public SharedPreferences sharedPrefs;
     public MemoCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     /**
@@ -40,15 +45,23 @@ public class MemoCursorAdapter extends CursorAdapter{
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        //获取color
+        String color = sharedPrefs.getString("fontcolor","#333");
+        String fontsize = sharedPrefs.getString("fontsize","16");
         // 查找要修改的视图
         TextView contentTextView = (TextView) view.findViewById(R.id.content);
+
+        //设置颜色和字体
+        contentTextView.setTextSize(Float.parseFloat(fontsize));
+        contentTextView.setTextColor(Color.parseColor(color));
+
         TextView timeTextView = (TextView) view.findViewById(R.id.time);
 
-        // 查找 需要的宠物属性所在的列
+        // 查找 需要的属性所在的列
         int contentColumnIndex = cursor.getColumnIndex(MemoEntry.COLUMN_MEMO_DEPOSIT_CONTENT);
         int timeColumnIndex = cursor.getColumnIndex(MemoEntry.COLUMN_MEMO_DEPOSIT_TIME);
 
-        // 从cursor获取宠物属性
+        // 从cursor获取属性
         String content = cursor.getString(contentColumnIndex);
         //字符串转long再转Date
         Date date = new Date(Long.parseLong(cursor.getString(timeColumnIndex)));

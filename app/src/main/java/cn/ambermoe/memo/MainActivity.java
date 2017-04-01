@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final int MEMO_LOADER = 0;
 
     //内容数据集合
-    public ArrayList<String> mContent;
+    public ArrayList<String> mContent =  new ArrayList<>();;
     /** listview的Adapter */
     public MemoCursorAdapter mCursorAdapter;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         //浮动上下文菜单
-        //注册后的视图收到长按事件时，系统将调用您的 onCreateContextMenu() 方法
+        //注册后的视图收到长按事件时，系统将调用 onCreateContextMenu() 方法
         registerForContextMenu(memoListView);
         // 点击fab打开 EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -103,9 +103,15 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.cancel:
 
                 return true;
-
+            //编辑现有的一条数据
             case R.id.content_edit:
-
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                // 将 id append 到 uri (向Provider查询该宠物信息的URI)
+                Uri currentMemoUri = ContentUris.withAppendedId(MemoEntry.CONTENT_URI, mId);
+                // 让intent携带 至 DditorActivity
+                intent.setData(currentMemoUri);
+                // 启动编辑界面
+                startActivity(intent);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -125,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // 点击设置
             case R.id.action_setting:
+                //跳转到设置页面
+                Intent settingsIntent = new Intent(this, SettingActivity.class);
+                startActivity(settingsIntent);
                 return true;
             // 点击了插入一条数据
             case R.id.action_insert_memo:
@@ -172,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         // 查询的字段
         String[] projection = {
                 MemoEntry._ID,
@@ -195,11 +205,21 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // 更新 PetCursorAdapter使用新的数据
         mCursorAdapter.swapCursor(data);
+        mContent.clear();
+        //没有数据 不执行余下操作
+        if(data == null || data.getCount() < 1)
+            return;
         int contentColumnIndex = data.getColumnIndex(MemoEntry.COLUMN_MEMO_DEPOSIT_CONTENT);
-        mContent = new ArrayList<>();
-        while(data.moveToNext()) {
+        /**
+         * 在插入和更新之后 cursor指针指向了第一行（也就是0）
+         * 而正常情况下 要经过一次 moveToNext（）才指向第一行
+         * 所以先moveToFirst 再执行do while操作
+         */
+        data.moveToFirst();
+        do {
             mContent.add(data.getString(contentColumnIndex));
-        }
+        } while (data.moveToNext());
+
     }
 
     @Override
@@ -207,6 +227,6 @@ public class MainActivity extends AppCompatActivity implements
         // 当删除数据时调用
         //设为空 再设置新的数据
         mCursorAdapter.swapCursor(null);
-        mContent = null;
+        mContent.clear();
     }
 }

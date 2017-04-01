@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="设置">
+
+    <!--默认红色-->
+    <ListPreference
+        android:defaultValue="#ff0004"
+        android:entries="@array/settings_color"
+        android:entryValues="@array/settings_color_value"
+        android:key="fontcolor"
+        android:title="字体颜色" />
+
+    <EditTextPreference
+        android:defaultValue="16"
+        android:inputType="numberDecimal"
+        android:key="fontsize"
+        android:selectAllOnFocus="true"
+        android:title="字体大小" />
+</PreferenceScreen>
