@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements
 
         ListView memoListView = (ListView) findViewById(R.id.list);
 
+        //listview无数据时显示内容
+        View emptyView = findViewById(R.id.empty_view);
+        memoListView.setEmptyView(emptyView);
         //设置数据
         mCursorAdapter = new MemoCursorAdapter(this, null);
         memoListView.setAdapter(mCursorAdapter);
