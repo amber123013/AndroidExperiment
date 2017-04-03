@@ -2,12 +2,14 @@ package cn.ambermoe.memo;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -21,19 +23,29 @@ public class SettingActivity extends AppCompatActivity {
     //让手机的返回键 执行 导航栏的返回键（设置完成刷新listview
     @Override
     public void onBackPressed() {
-        onOptionsItemSelected((MenuItem) findViewById(android.R.id.home));
+        doClick(findViewById(android.R.id.home),5,5);
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            //导航栏的返回键
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return true;
+    /**
+     * 模拟点击屏幕（解决进入editorActivity editview不能获取焦点
+     * 在视图加载完成后 模拟在 view 视图 的（x,y）点击一次屏幕
+     * @param view 被点击的视图
+     * @param x  x坐标
+     * @param y y坐标
+     */
+    private void doClick(View view, float x, float y) {
+        long downTime = SystemClock.uptimeMillis();
+        //按下事件
+        MotionEvent downEvent = MotionEvent.obtain(downTime, downTime, MotionEvent.ACTION_DOWN, x, y, 0);
+        downTime += 500;
+        //抬起事件
+        MotionEvent upEvent = MotionEvent.obtain(downTime, downTime, MotionEvent.ACTION_UP, x, y, 0);
+        //模拟按下 抬起
+        view.onTouchEvent(downEvent);
+        view.onTouchEvent(upEvent);
+        downEvent.recycle();
+        upEvent.recycle();
     }
 
     //使用PreferenceFragment settings_main中的值会被自动存为 SharedPreferences

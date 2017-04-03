@@ -140,7 +140,7 @@ public class MemoProvider extends ContentProvider{
          */
         //内容
         String content = values.getAsString(MemoContract.MemoEntry.COLUMN_MEMO_DEPOSIT_CONTENT);
-        if (content == null || content =="") {
+        if (content == null || "".equals(content)) {
             throw new IllegalArgumentException("内容不能为空");
         }
         /**
@@ -234,7 +234,7 @@ public class MemoProvider extends ContentProvider{
         //是否包含内容 -- 内容是否为空
         if (values.containsKey(MemoContract.MemoEntry.COLUMN_MEMO_DEPOSIT_CONTENT)) {
             String content = values.getAsString(MemoContract.MemoEntry.COLUMN_MEMO_DEPOSIT_CONTENT);
-            if (content == null || content == "") {
+            if (content == null || "".equals(content)) {
                 throw new IllegalArgumentException("内容不能为空");
             }
         }
