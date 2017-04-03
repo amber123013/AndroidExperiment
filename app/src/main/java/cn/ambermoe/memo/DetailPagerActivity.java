@@ -19,12 +19,13 @@ public class DetailPagerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ArrayList arrayList = intent.getStringArrayListExtra("content");
+        ArrayList arrayListId = intent.getIntegerArrayListExtra("contentId");
         int currentPosition = intent.getIntExtra("currentPosition",0);
        // Toast.makeText(DetailPagerActivity.this,currentPosition+ "  "+ arrayList.get(0),Toast.LENGTH_SHORT).show();
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
 
-        final SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(),arrayList);
+        final SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(),arrayList,arrayListId);
         viewPager.setAdapter(adapter);
 //        String str = "";
 //        for(int i=0;i<arrayList.size();i++) {

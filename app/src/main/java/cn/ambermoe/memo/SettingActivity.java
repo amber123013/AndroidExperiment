@@ -104,7 +104,7 @@ public class SettingActivity extends AppCompatActivity {
             preference.setOnPreferenceChangeListener(this);
 
             //第一个 加载出设置页面时 手动绑定显示
-            //因为打开setting页面是并不会触发onPreferenceChange
+            //因为打开setting页面时并不会触发onPreferenceChange
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);

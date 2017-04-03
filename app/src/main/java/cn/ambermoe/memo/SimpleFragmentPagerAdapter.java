@@ -14,10 +14,12 @@ import java.util.ArrayList;
 public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<String> arrayList;
+    private ArrayList<Integer> arrayListId;
 
-    public SimpleFragmentPagerAdapter(FragmentManager fm, ArrayList<String> arrayList) {
+    public SimpleFragmentPagerAdapter(FragmentManager fm, ArrayList<String> arrayList,ArrayList<Integer> arrayListId) {
         super(fm);
         this.arrayList = arrayList;
+        this.arrayListId = arrayListId;
     }
 
     public int count;
@@ -25,7 +27,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
-            fragment = new MemoFragment(arrayList.get(position));
+            fragment = new MemoFragment(arrayList.get(position),arrayListId.get(position));
         return fragment;
     }
 

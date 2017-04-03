@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity implements
     private static final int MEMO_LOADER = 0;
 
     //内容数据集合
-    public ArrayList<String> mContent =  new ArrayList<>();;
+    public ArrayList<String> mContent =  new ArrayList<>();
+    //id集合
+    public ArrayList<Integer> mContentId = new ArrayList<>();
     /** listview的Adapter */
     public MemoCursorAdapter mCursorAdapter;
 
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements
                 Intent intent = new Intent(MainActivity.this, DetailPagerActivity.class);
                 intent.putExtra("currentPosition",position);
                 intent.putStringArrayListExtra("content",mContent);
+                intent.putIntegerArrayListExtra("contentId",mContentId);
                 startActivity(intent);
             }
         });
@@ -209,10 +212,12 @@ public class MainActivity extends AppCompatActivity implements
         // 更新 PetCursorAdapter使用新的数据
         mCursorAdapter.swapCursor(data);
         mContent.clear();
+        mContentId.clear();
         //没有数据 不执行余下操作
         if(data == null || data.getCount() < 1)
             return;
         int contentColumnIndex = data.getColumnIndex(MemoEntry.COLUMN_MEMO_DEPOSIT_CONTENT);
+        int contentIdColumnIndex = data.getColumnIndex(MemoEntry._ID);
         /**
          * 在插入和更新之后 cursor指针指向了第一行（也就是0）
          * 而正常情况下 要经过一次 moveToNext（）才指向第一行
@@ -221,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements
         data.moveToFirst();
         do {
             mContent.add(data.getString(contentColumnIndex));
+            mContentId.add(Integer.parseInt(data.getString(contentIdColumnIndex)));
         } while (data.moveToNext());
 
     }
@@ -231,5 +237,6 @@ public class MainActivity extends AppCompatActivity implements
         //设为空 再设置新的数据
         mCursorAdapter.swapCursor(null);
         mContent.clear();
+        mContentId.clear();
     }
 }
