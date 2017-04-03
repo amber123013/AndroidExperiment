@@ -12,10 +12,13 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -72,7 +75,39 @@ public class EditorActivity extends AppCompatActivity  implements LoaderManager.
             //此时onLoadFinished 获得Cursor中只包含单个宠物信息
             getLoaderManager().initLoader(0, null, this);
         }
+        //延迟500ms后 执行点击屏幕
+        mContent.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                mContent.setFocusable(true);
+//                mContent.setFocusableInTouchMode(true);
+//                mContent.requestFocus();
+                doClick(mContent,2000,2000);
+            }
+        }, 500);
     }
+
+    /**
+     * 模拟点击屏幕（解决进入editorActivity editview不能获取焦点
+     * 在视图加载完成后 模拟在 view 视图 的（x,y）点击一次屏幕
+     * @param view 被点击的视图
+     * @param x  x坐标
+     * @param y y坐标
+     */
+    private void doClick(View view, float x, float y) {
+        long downTime = SystemClock.uptimeMillis();
+        //按下事件
+        MotionEvent downEvent = MotionEvent.obtain(downTime, downTime, MotionEvent.ACTION_DOWN, x, y, 0);
+        downTime += 500;
+        //抬起事件
+        MotionEvent upEvent = MotionEvent.obtain(downTime, downTime, MotionEvent.ACTION_UP, x, y, 0);
+        //模拟按下 抬起
+        view.onTouchEvent(downEvent);
+        view.onTouchEvent(upEvent);
+        downEvent.recycle();
+        upEvent.recycle();
+    }
+
     //在onCreateOptionsMenu之前调用
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -92,13 +127,10 @@ public class EditorActivity extends AppCompatActivity  implements LoaderManager.
         return true;
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        EditText editText  = ((EditText)findViewById(R.id.content_edit));
-//        editText.setFocusableInTouchMode(true);
-//        boolean flag = editText.requestFocus();
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
